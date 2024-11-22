@@ -134,7 +134,7 @@ if uploaded_file is not None:
             if st.checkbox('Mostrar datos crudos'):
                 st.write(df_filtered)
 
-        with tab2:
+    with tab2:
     st.subheader('Análisis Estadístico')
     
     # Variable selector for statistics
