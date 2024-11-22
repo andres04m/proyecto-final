@@ -106,6 +106,24 @@ if uploaded_file is not None:
             if st.checkbox('Mostrar datos crudos'):
                 st.write(df1)
 
+st.write("### Filtrar por rango de tiempo")
+start_date, end_date = st.slider(
+    "Seleccione el rango de fechas:",
+    min_value=df1.index.min(),
+    max_value=df1.index.max(),
+    value=(df1.index.min(), df1.index.max())
+)
+df_filtered = df1[(df1.index >= start_date) & (df1.index <= end_date)]
+
+if variable == "Ambas variables":
+    st.write("### Datos Filtrados - Temperatura")
+    st.line_chart(df_filtered["temperatura"])
+    st.write("### Datos Filtrados - Humedad")
+    st.line_chart(df_filtered["humedad"])
+else:
+    st.line_chart(df_filtered[variable])
+
+
         with tab2:
             st.subheader('Análisis Estadístico')
             
