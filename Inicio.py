@@ -215,17 +215,30 @@ if uploaded_file is not None:
                         f"{max_val}{'°C' if filter_variable == 'temperatura' else '%'}:")
                 st.dataframe(filtrado_df_max)
 
-            # Download filtered data
-            if st.button('Descargar datos filtrados'):
-                csv = filtrado_df_min.to_csv().encode('utf-8')
-                st.download_button(
-                    label="Descargar CSV",
-                    data=csv,
-                    file_name='datos_filtrados.csv',
-                    mime='text/csv',
-                )
+            # Date range filter
+            st.write("### Filtro por Rango de Fechas")
+            start_date, end_date = st.date_input(
+                "Seleccione un rango de fechas:",
+                [df1.index.min().date(), df1.index.max().date()]
+            )
+            filtrado_df_date = df1.loc[start_date:end_date]
+            st.write(f"Registros entre {start_date} y {end_date}:")
+            st.dataframe(filtrado_df_date)
 
+            # Filter by condition
+            st.write("### Filtrar por condición específica")
+            condition = st.selectbox("Seleccione una condición para filtrar",
+                                    ["Temperatura mayor a 25°C", "Humedad menor a 50%"])
+            if condition == "Temperatura mayor a 25°C":
+                condition_df = df1[df1['temperatura'] > 25]
+                st.write("Registros donde temperatura es mayor a 25°C:")
+                st.dataframe(condition_df)
+            else:
+                condition_df = df1[df1['humedad'] < 50]
+                st.write("Registros donde humedad es menor a 50%:")
+                st.dataframe(condition_df)
 
+       
        
         with tab4:
             st.subheader("Información del Sitio de Medición")
