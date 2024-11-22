@@ -3,8 +3,6 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 from datetime import datetime
-import seaborn as sns
-import matplotlib.pyplot as plt
 
 # Page configuration
 st.set_page_config(
@@ -176,13 +174,6 @@ if uploaded_file is not None:
                 st.write(f"### Distribución de {stat_variable.capitalize()}")
                 st.bar_chart(df1[stat_variable].value_counts())
 
-                # Display boxplot for the selected variable
-                st.write(f"### Boxplot de {stat_variable.capitalize()}")
-                fig, ax = plt.subplots()
-                sns.boxplot(x=df1[stat_variable], ax=ax)
-                st.pyplot(fig)
-
-        
         with tab3:
             st.subheader('Filtros de Datos')
             
