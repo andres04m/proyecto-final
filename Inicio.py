@@ -215,16 +215,28 @@ if uploaded_file is not None:
                         f"{max_val}{'°C' if filter_variable == 'temperatura' else '%'}:")
                 st.dataframe(filtrado_df_max)
 
-            # Download filtered data
-            if st.button('Descargar datos filtrados'):
-                csv = filtrado_df_min.to_csv().encode('utf-8')
-                st.download_button(
-                    label="Descargar CSV",
-                    data=csv,
-                    file_name='datos_filtrados.csv',
-                    mime='text/csv',
+            # New Filters
+            with col1:
+                # Range Filter for Specific Interval
+                range_min = st.slider(
+                    f"Valor mínimo de {filter_variable} en intervalo",
+                    float(df1[filter_variable].min()),
+                    float(df1[filter_variable].max()),
+                    float(df1[filter_variable].mean()) - 5,
+                    key="range_min"
                 )
-
+                range_max = st.slider(
+                    f"Valor máximo de {filter_variable} en intervalo",
+                    float(df1[filter_variable].min()),
+                    float(df1[filter_variable].max()),
+                    float(df1[filter_variable].mean()) + 5,
+                    key="range_max"
+                )
+                filtered_interval_df = df1[
+                    (df1[filter_variable] >= range_min) & (df1[filter_variable] <= range_max)
+                ]
+                st.write(f"Registros en el intervalo de {filter_variable}:", f"{range_min} a {range_max}")
+                st.dataframe(filtered_interval_df)
 
        
         with tab4:
