@@ -3,7 +3,6 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 from datetime import datetime
-import matplotlib.pyplot as plt  # Importamos matplotlib para los gráficos adicionales
 
 # Page configuration
 st.set_page_config(
@@ -83,7 +82,7 @@ if uploaded_file is not None:
             # Chart type selector
             chart_type = st.selectbox(
                 "Seleccione tipo de gráfico",
-                ["Línea", "Área", "Barra", "Puntos", "Caja"]
+                ["Línea", "Área", "Barra"]
             )
 
             # Promedio móvil
@@ -98,16 +97,8 @@ if uploaded_file is not None:
                     st.line_chart(temp_data)
                 elif chart_type == "Área":
                     st.area_chart(temp_data)
-                elif chart_type == "Barra":
+                else:
                     st.bar_chart(temp_data)
-                elif chart_type == "Puntos":
-                    # Gráfico de puntos (scatter plot)
-                    fig, ax = plt.subplots()
-                    ax.scatter(temp_data.index, temp_data.values)
-                    ax.set_title("Gráfico de Puntos - Temperatura")
-                    ax.set_xlabel("Fecha")
-                    ax.set_ylabel("Temperatura (°C)")
-                    st.pyplot(fig)
 
                 if show_moving_avg:
                     st.line_chart(temp_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
@@ -118,16 +109,8 @@ if uploaded_file is not None:
                     st.line_chart(hum_data)
                 elif chart_type == "Área":
                     st.area_chart(hum_data)
-                elif chart_type == "Barra":
+                else:
                     st.bar_chart(hum_data)
-                elif chart_type == "Puntos":
-                    # Gráfico de puntos (scatter plot)
-                    fig, ax = plt.subplots()
-                    ax.scatter(hum_data.index, hum_data.values)
-                    ax.set_title("Gráfico de Puntos - Humedad")
-                    ax.set_xlabel("Fecha")
-                    ax.set_ylabel("Humedad (%)")
-                    st.pyplot(fig)
 
                 if show_moving_avg:
                     st.line_chart(hum_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
@@ -137,16 +120,8 @@ if uploaded_file is not None:
                     st.line_chart(data)
                 elif chart_type == "Área":
                     st.area_chart(data)
-                elif chart_type == "Barra":
+                else:
                     st.bar_chart(data)
-                elif chart_type == "Puntos":
-                    # Gráfico de puntos (scatter plot)
-                    fig, ax = plt.subplots()
-                    ax.scatter(data.index, data.values)
-                    ax.set_title(f"Gráfico de Puntos - {variable.capitalize()}")
-                    ax.set_xlabel("Fecha")
-                    ax.set_ylabel(variable.capitalize())
-                    st.pyplot(fig)
 
                 if show_moving_avg:
                     st.line_chart(data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
