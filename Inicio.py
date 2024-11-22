@@ -97,6 +97,8 @@ if uploaded_file is not None:
         # Suavizado de la línea (promedio móvil)
                 smoothed_temp_data = temp_data.rolling(moving_avg_window).mean()
                 st.line_chart(smoothed_temp_data)
+
+
     elif chart_type == "Área":
         st.area_chart(temp_data)
     else:
