@@ -2,8 +2,6 @@ import pandas as pd
 import streamlit as st
 from PIL import Image
 import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from datetime import datetime
 
 # Page configuration
@@ -84,7 +82,7 @@ if uploaded_file is not None:
             # Chart type selector
             chart_type = st.selectbox(
                 "Seleccione tipo de gráfico",
-                ["Línea", "Área", "Barra", "Puntos"]
+                ["Línea", "Área", "Barra"]
             )
 
             # Promedio móvil
@@ -99,15 +97,8 @@ if uploaded_file is not None:
                     st.line_chart(temp_data)
                 elif chart_type == "Área":
                     st.area_chart(temp_data)
-                elif chart_type == "Barra":
+                else:
                     st.bar_chart(temp_data)
-                elif chart_type == "Puntos":
-                    fig, ax = plt.subplots()
-                    ax.scatter(temp_data.index, temp_data, label="Temperatura", color='red')
-                    ax.set_xlabel("Fecha")
-                    ax.set_ylabel("Temperatura (°C)")
-                    ax.set_title("Gráfico de Puntos de Temperatura")
-                    st.pyplot(fig)
 
                 if show_moving_avg:
                     st.line_chart(temp_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
@@ -118,15 +109,8 @@ if uploaded_file is not None:
                     st.line_chart(hum_data)
                 elif chart_type == "Área":
                     st.area_chart(hum_data)
-                elif chart_type == "Barra":
+                else:
                     st.bar_chart(hum_data)
-                elif chart_type == "Puntos":
-                    fig, ax = plt.subplots()
-                    ax.scatter(hum_data.index, hum_data, label="Humedad", color='blue')
-                    ax.set_xlabel("Fecha")
-                    ax.set_ylabel("Humedad (%)")
-                    ax.set_title("Gráfico de Puntos de Humedad")
-                    st.pyplot(fig)
 
                 if show_moving_avg:
                     st.line_chart(hum_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
@@ -136,15 +120,8 @@ if uploaded_file is not None:
                     st.line_chart(data)
                 elif chart_type == "Área":
                     st.area_chart(data)
-                elif chart_type == "Barra":
+                else:
                     st.bar_chart(data)
-                elif chart_type == "Puntos":
-                    fig, ax = plt.subplots()
-                    ax.scatter(data.index, data, label=variable, color='green')
-                    ax.set_xlabel("Fecha")
-                    ax.set_ylabel(variable.capitalize())
-                    ax.set_title(f"Gráfico de Puntos de {variable.capitalize()}")
-                    st.pyplot(fig)
 
                 if show_moving_avg:
                     st.line_chart(data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
@@ -244,14 +221,19 @@ if uploaded_file is not None:
             with col1:
                 st.write("### Ubicación del Sensor")
                 st.write("**Universidad EAFIT**")
-                st.write("- Dirección: Calle 7 sur # 42-06")
-                st.write("- Código Postal: 050022")
+                st.write("- Latitud: 6.2006")
+                st.write("- Longitud: -75.5783")
+                st.write("- Altitud: ~1,495 metros sobre el nivel del mar")
             
             with col2:
-                st.write("### Descripción del Proyecto")
-                st.write("Este proyecto recopila datos de sensores de temperatura y humedad en la Universidad EAFIT con el fin de monitorizar las condiciones ambientales. Estos datos serán utilizados para mejorar la eficiencia energética y otros aspectos operacionales del campus.")
-                st.write("La aplicación proporciona herramientas para visualizar, analizar y filtrar estos datos de manera eficiente.")
-                
+                st.write("### Detalles del Sensor")
+                st.write("- Tipo: ESP32")
+                st.write("- Variables medidas:")
+                st.write("  * Temperatura (°C)")
+                st.write("  * Humedad (%)")
+                st.write("- Frecuencia de medición: Según configuración")
+                st.write("- Ubicación: Campus universitario")
+
     except Exception as e:
         st.error(f'Error al procesar el archivo: {str(e)}')
 else:
