@@ -3,7 +3,6 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 from datetime import datetime
-from scipy.interpolate import make_interp_spline
 
 # Page configuration
 st.set_page_config(
@@ -104,12 +103,6 @@ if uploaded_file is not None:
                 if show_moving_avg:
                     st.line_chart(temp_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
 
-                # Line suavizada
-                x = np.arange(len(temp_data))
-                spline = make_interp_spline(x, temp_data)
-                temp_smooth = spline(x)
-                st.line_chart(temp_smooth, height=150, caption="Línea Suavizada")
-
                 st.write("### Humedad")
                 hum_data = df_filtered["humedad"]
                 if chart_type == "Línea":
@@ -121,12 +114,6 @@ if uploaded_file is not None:
 
                 if show_moving_avg:
                     st.line_chart(hum_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
-
-                # Line suavizada para humedad
-                x_hum = np.arange(len(hum_data))
-                spline_hum = make_interp_spline(x_hum, hum_data)
-                hum_smooth = spline_hum(x_hum)
-                st.line_chart(hum_smooth, height=150, caption="Línea Suavizada para Humedad")
             else:
                 data = df_filtered[variable]
                 if chart_type == "Línea":
@@ -138,12 +125,6 @@ if uploaded_file is not None:
 
                 if show_moving_avg:
                     st.line_chart(data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
-
-                # Suavizar la línea
-                x_data = np.arange(len(data))
-                spline_data = make_interp_spline(x_data, data)
-                data_smooth = spline_data(x_data)
-                st.line_chart(data_smooth, height=150, caption="Línea Suavizada")
 
                 # Visualizar máximo y mínimo
                 st.metric(f"Valor máximo de {variable}", data.max())
