@@ -159,12 +159,16 @@ if uploaded_file is not None:
                     st.metric("Temperatura Mínima", f"{stats_df['min']:.2f}°C")
                     st.metric("Temperatura Mediana", f"{df1[stat_variable].median():.2f}°C")
                     st.metric("Desviación estándar", f"{df1[stat_variable].std():.2f}°C")
+                    st.metric("Temperatura 75 Percentil", f"{np.percentile(df1[stat_variable], 75):.2f}°C")
+                    st.metric("Temperatura 25 Percentil", f"{np.percentile(df1[stat_variable], 25):.2f}°C")
                 else:
                     st.metric("Humedad Promedio", f"{stats_df['mean']:.2f}%")
                     st.metric("Humedad Máxima", f"{stats_df['max']:.2f}%")
                     st.metric("Humedad Mínima", f"{stats_df['min']:.2f}%")
                     st.metric("Humedad Mediana", f"{df1[stat_variable].median():.2f}%")
                     st.metric("Desviación estándar", f"{df1[stat_variable].std():.2f}%")
+                    st.metric("Humedad 75 Percentil", f"{np.percentile(df1[stat_variable], 75):.2f}%")
+                    st.metric("Humedad 25 Percentil", f"{np.percentile(df1[stat_variable], 25):.2f}%")
                 
                 # Display histogram for the selected variable
                 st.write(f"### Distribución de {stat_variable.capitalize()}")
@@ -222,6 +226,7 @@ if uploaded_file is not None:
                 )
 
 
+       
         with tab4:
             st.subheader("Información del Sitio de Medición")
             
