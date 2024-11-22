@@ -63,68 +63,48 @@ if uploaded_file is not None:
         tab1, tab2, tab3, tab4 = st.tabs(["📈 Visualización", "📊 Estadísticas", "🔍 Filtros", "🗺️ Información del Sitio"])
 
         with tab1:
-    st.subheader('Visualización de Datos')
-    
-    # Variable selector
-    variable = st.selectbox(
-        "Seleccione variable a visualizar",
-        ["temperatura", "humedad", "Ambas variables"]
-    )
-    
-    # Chart type selector
-    chart_type = st.selectbox(
-        "Seleccione tipo de gráfico",
-        ["Línea", "Área", "Barra", "Dispersión", "Histograma"]
-    )
-    
-    # Create plot based on selection
-    if variable == "Ambas variables":
-        st.write("### Temperatura")
-        if chart_type == "Línea":
-            st.line_chart(df1["temperatura"])
-        elif chart_type == "Área":
-            st.area_chart(df1["temperatura"])
-        elif chart_type == "Barra":
-            st.bar_chart(df1["temperatura"])
-        elif chart_type == "Dispersión":
-            st.write("Gráfico de Dispersión no soporta múltiples variables simultáneamente. Seleccione una variable.")
-        elif chart_type == "Histograma":
-            st.bar_chart(np.histogram(df1["temperatura"], bins=20)[0])
+            st.subheader('Visualización de Datos')
             
-        st.write("### Humedad")
-        if chart_type == "Línea":
-            st.line_chart(df1["humedad"])
-        elif chart_type == "Área":
-            st.area_chart(df1["humedad"])
-        elif chart_type == "Barra":
-            st.bar_chart(df1["humedad"])
-        elif chart_type == "Dispersión":
-            st.write("Gráfico de Dispersión no soporta múltiples variables simultáneamente. Seleccione una variable.")
-        elif chart_type == "Histograma":
-            st.bar_chart(np.histogram(df1["humedad"], bins=20)[0])
-    else:
-        if chart_type == "Línea":
-            st.line_chart(df1[variable])
-        elif chart_type == "Área":
-            st.area_chart(df1[variable])
-        elif chart_type == "Barra":
-            st.bar_chart(df1[variable])
-        elif chart_type == "Dispersión":
-            st.markdown(f"### Gráfico de Dispersión para {variable}")
-            st.altair_chart(
-                alt.Chart(df1.reset_index()).mark_point().encode(
-                    x="Time:T",
-                    y=f"{variable}:Q"
-                ),
-                use_container_width=True
+            # Variable selector
+            variable = st.selectbox(
+                "Seleccione variable a visualizar",
+                ["temperatura", "humedad", "Ambas variables"]
             )
-        elif chart_type == "Histograma":
-            st.markdown(f"### Histograma para {variable}")
-            st.bar_chart(np.histogram(df1[variable], bins=20)[0])
+            
+            # Chart type selector
+            chart_type = st.selectbox(
+                "Seleccione tipo de gráfico",
+                ["Línea", "Área", "Barra"]
+            )
+            
+            # Create plot based on selection
+            if variable == "Ambas variables":
+                st.write("### Temperatura")
+                if chart_type == "Línea":
+                    st.line_chart(df1["temperatura"])
+                elif chart_type == "Área":
+                    st.area_chart(df1["temperatura"])
+                else:
+                    st.bar_chart(df1["temperatura"])
+                    
+                st.write("### Humedad")
+                if chart_type == "Línea":
+                    st.line_chart(df1["humedad"])
+                elif chart_type == "Área":
+                    st.area_chart(df1["humedad"])
+                else:
+                    st.bar_chart(df1["humedad"])
+            else:
+                if chart_type == "Línea":
+                    st.line_chart(df1[variable])
+                elif chart_type == "Área":
+                    st.area_chart(df1[variable])
+                else:
+                    st.bar_chart(df1[variable])
 
-    # Raw data display with toggle
-    if st.checkbox('Mostrar datos crudos'):
-        st.write(df1)
+            # Raw data display with toggle
+            if st.checkbox('Mostrar datos crudos'):
+                st.write(df1)
 
         with tab2:
             st.subheader('Análisis Estadístico')
