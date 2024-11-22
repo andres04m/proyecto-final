@@ -3,6 +3,7 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 from datetime import datetime
+import matplotlib.pyplot as plt  # Importamos matplotlib para los gráficos adicionales
 
 # Page configuration
 st.set_page_config(
@@ -65,6 +66,14 @@ if uploaded_file is not None:
         with tab1:
             st.subheader('Visualización de Datos')
             
+            # Rango de fechas
+            st.write("### Filtro por Rango de Fechas")
+            start_date, end_date = st.date_input(
+                "Seleccione un rango de fechas:",
+                [df1.index.min().date(), df1.index.max().date()]
+            )
+            df_filtered = df1.loc[start_date:end_date]
+
             # Variable selector
             variable = st.selectbox(
                 "Seleccione variable a visualizar",
@@ -74,52 +83,81 @@ if uploaded_file is not None:
             # Chart type selector
             chart_type = st.selectbox(
                 "Seleccione tipo de gráfico",
-                ["Línea", "Área", "Barra", "Líneas Suavizadas", "Puntos"]
+                ["Línea", "Área", "Barra", "Puntos", "Caja"]
             )
-            
+
+            # Promedio móvil
+            show_moving_avg = st.checkbox("Mostrar promedio móvil")
+            moving_avg_window = st.slider("Ventana para promedio móvil:", 1, 30, 7) if show_moving_avg else None
+
             # Create plot based on selection
             if variable == "Ambas variables":
                 st.write("### Temperatura")
+                temp_data = df_filtered["temperatura"]
                 if chart_type == "Línea":
-                    st.line_chart(df1["temperatura"])
+                    st.line_chart(temp_data)
                 elif chart_type == "Área":
-                    st.area_chart(df1["temperatura"])
+                    st.area_chart(temp_data)
                 elif chart_type == "Barra":
-                    st.bar_chart(df1["temperatura"])
-                elif chart_type == "Líneas Suavizadas":
-                    st.line_chart(df1["temperatura"].rolling(5).mean())
-                else:  # Puntos
-                    st.write(df1["temperatura"].reset_index().plot.scatter(x="Time", y="temperatura"))
-                    st.pyplot()
-                    
+                    st.bar_chart(temp_data)
+                elif chart_type == "Puntos":
+                    # Gráfico de puntos (scatter plot)
+                    fig, ax = plt.subplots()
+                    ax.scatter(temp_data.index, temp_data.values)
+                    ax.set_title("Gráfico de Puntos - Temperatura")
+                    ax.set_xlabel("Fecha")
+                    ax.set_ylabel("Temperatura (°C)")
+                    st.pyplot(fig)
+
+                if show_moving_avg:
+                    st.line_chart(temp_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
+
                 st.write("### Humedad")
+                hum_data = df_filtered["humedad"]
                 if chart_type == "Línea":
-                    st.line_chart(df1["humedad"])
+                    st.line_chart(hum_data)
                 elif chart_type == "Área":
-                    st.area_chart(df1["humedad"])
+                    st.area_chart(hum_data)
                 elif chart_type == "Barra":
-                    st.bar_chart(df1["humedad"])
-                elif chart_type == "Líneas Suavizadas":
-                    st.line_chart(df1["humedad"].rolling(5).mean())
-                else:  # Puntos
-                    st.write(df1["humedad"].reset_index().plot.scatter(x="Time", y="humedad"))
-                    st.pyplot()
+                    st.bar_chart(hum_data)
+                elif chart_type == "Puntos":
+                    # Gráfico de puntos (scatter plot)
+                    fig, ax = plt.subplots()
+                    ax.scatter(hum_data.index, hum_data.values)
+                    ax.set_title("Gráfico de Puntos - Humedad")
+                    ax.set_xlabel("Fecha")
+                    ax.set_ylabel("Humedad (%)")
+                    st.pyplot(fig)
+
+                if show_moving_avg:
+                    st.line_chart(hum_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
             else:
+                data = df_filtered[variable]
                 if chart_type == "Línea":
-                    st.line_chart(df1[variable])
+                    st.line_chart(data)
                 elif chart_type == "Área":
-                    st.area_chart(df1[variable])
+                    st.area_chart(data)
                 elif chart_type == "Barra":
-                    st.bar_chart(df1[variable])
-                elif chart_type == "Líneas Suavizadas":
-                    st.line_chart(df1[variable].rolling(5).mean())
-                else:  # Puntos
-                    st.write(df1[variable].reset_index().plot.scatter(x="Time", y=variable))
-                    st.pyplot()
+                    st.bar_chart(data)
+                elif chart_type == "Puntos":
+                    # Gráfico de puntos (scatter plot)
+                    fig, ax = plt.subplots()
+                    ax.scatter(data.index, data.values)
+                    ax.set_title(f"Gráfico de Puntos - {variable.capitalize()}")
+                    ax.set_xlabel("Fecha")
+                    ax.set_ylabel(variable.capitalize())
+                    st.pyplot(fig)
+
+                if show_moving_avg:
+                    st.line_chart(data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
+
+                # Visualizar máximo y mínimo
+                st.metric(f"Valor máximo de {variable}", data.max())
+                st.metric(f"Valor mínimo de {variable}", data.min())
 
             # Raw data display with toggle
             if st.checkbox('Mostrar datos crudos'):
-                st.write(df1)
+                st.write(df_filtered)
 
         with tab2:
             st.subheader('Análisis Estadístico')
