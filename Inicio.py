@@ -91,12 +91,12 @@ if uploaded_file is not None:
 
             # Create plot based on selection
             if variable == "Ambas variables":
-    st.write("### Temperatura")
-    temp_data = df_filtered["temperatura"]
-    if chart_type == "Línea":
+                st.write("### Temperatura")
+                temp_data = df_filtered["temperatura"]
+            if chart_type == "Línea":
         # Suavizado de la línea (promedio móvil)
-        smoothed_temp_data = temp_data.rolling(moving_avg_window).mean()
-        st.line_chart(smoothed_temp_data)
+                smoothed_temp_data = temp_data.rolling(moving_avg_window).mean()
+                st.line_chart(smoothed_temp_data)
     elif chart_type == "Área":
         st.area_chart(temp_data)
     else:
@@ -133,8 +133,8 @@ else:
         st.line_chart(smoothed_data, height=150, caption="Promedio móvil")
 
 # Visualizar máximo y mínimo
-st.metric(f"Valor máximo de {variable}", data.max())
-st.metric(f"Valor mínimo de {variable}", data.min())
+        st.metric(f"Valor máximo de {variable}", data.max())
+        st.metric(f"Valor mínimo de {variable}", data.min())
 
             # Raw data display with toggle
             if st.checkbox('Mostrar datos crudos'):
