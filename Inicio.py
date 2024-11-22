@@ -157,10 +157,18 @@ if uploaded_file is not None:
                     st.metric("Temperatura Promedio", f"{stats_df['mean']:.2f}°C")
                     st.metric("Temperatura Máxima", f"{stats_df['max']:.2f}°C")
                     st.metric("Temperatura Mínima", f"{stats_df['min']:.2f}°C")
+                    st.metric("Temperatura Mediana", f"{df1[stat_variable].median():.2f}°C")
+                    st.metric("Desviación estándar", f"{df1[stat_variable].std():.2f}°C")
                 else:
                     st.metric("Humedad Promedio", f"{stats_df['mean']:.2f}%")
                     st.metric("Humedad Máxima", f"{stats_df['max']:.2f}%")
                     st.metric("Humedad Mínima", f"{stats_df['min']:.2f}%")
+                    st.metric("Humedad Mediana", f"{df1[stat_variable].median():.2f}%")
+                    st.metric("Desviación estándar", f"{df1[stat_variable].std():.2f}%")
+                
+                # Display histogram for the selected variable
+                st.write(f"### Distribución de {stat_variable.capitalize()}")
+                st.bar_chart(df1[stat_variable].value_counts())
 
         with tab3:
             st.subheader('Filtros de Datos')
@@ -212,6 +220,7 @@ if uploaded_file is not None:
                     file_name='datos_filtrados.csv',
                     mime='text/csv',
                 )
+
 
         with tab4:
             st.subheader("Información del Sitio de Medición")
