@@ -3,6 +3,8 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 from datetime import datetime
+import matplotlib
+
 
 st.set_page_config(
     page_title="Análisis de Sensores - Mi Ciudad",
