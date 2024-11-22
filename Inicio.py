@@ -65,6 +65,14 @@ if uploaded_file is not None:
         with tab1:
             st.subheader('Visualización de Datos')
             
+            # Rango de fechas
+            st.write("### Filtro por Rango de Fechas")
+            start_date, end_date = st.date_input(
+                "Seleccione un rango de fechas:",
+                [df1.index.min().date(), df1.index.max().date()]
+            )
+            df_filtered = df1.loc[start_date:end_date]
+
             # Variable selector
             variable = st.selectbox(
                 "Seleccione variable a visualizar",
@@ -76,35 +84,55 @@ if uploaded_file is not None:
                 "Seleccione tipo de gráfico",
                 ["Línea", "Área", "Barra"]
             )
-            
+
+            # Promedio móvil
+            show_moving_avg = st.checkbox("Mostrar promedio móvil")
+            moving_avg_window = st.slider("Ventana para promedio móvil:", 1, 30, 7) if show_moving_avg else None
+
             # Create plot based on selection
             if variable == "Ambas variables":
                 st.write("### Temperatura")
+                temp_data = df_filtered["temperatura"]
                 if chart_type == "Línea":
-                    st.line_chart(df1["temperatura"])
+                    st.line_chart(temp_data)
                 elif chart_type == "Área":
-                    st.area_chart(df1["temperatura"])
+                    st.area_chart(temp_data)
                 else:
-                    st.bar_chart(df1["temperatura"])
-                    
+                    st.bar_chart(temp_data)
+
+                if show_moving_avg:
+                    st.line_chart(temp_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
+
                 st.write("### Humedad")
+                hum_data = df_filtered["humedad"]
                 if chart_type == "Línea":
-                    st.line_chart(df1["humedad"])
+                    st.line_chart(hum_data)
                 elif chart_type == "Área":
-                    st.area_chart(df1["humedad"])
+                    st.area_chart(hum_data)
                 else:
-                    st.bar_chart(df1["humedad"])
+                    st.bar_chart(hum_data)
+
+                if show_moving_avg:
+                    st.line_chart(hum_data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
             else:
+                data = df_filtered[variable]
                 if chart_type == "Línea":
-                    st.line_chart(df1[variable])
+                    st.line_chart(data)
                 elif chart_type == "Área":
-                    st.area_chart(df1[variable])
+                    st.area_chart(data)
                 else:
-                    st.bar_chart(df1[variable])
+                    st.bar_chart(data)
+
+                if show_moving_avg:
+                    st.line_chart(data.rolling(moving_avg_window).mean(), height=150, caption="Promedio móvil")
+
+                # Visualizar máximo y mínimo
+                st.metric(f"Valor máximo de {variable}", data.max())
+                st.metric(f"Valor mínimo de {variable}", data.min())
 
             # Raw data display with toggle
             if st.checkbox('Mostrar datos crudos'):
-                st.write(df1)
+                st.write(df_filtered)
 
         with tab2:
             st.subheader('Análisis Estadístico')
