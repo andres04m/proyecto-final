@@ -253,4 +253,13 @@ if uploaded_file is not None:
                 st.write("La aplicación proporciona herramientas para visualizar, analizar y filtrar estos datos de manera eficiente.")
                 
     except Exception as e:
-        st.error(f'Error al cargar o procesar el archivo CSV: {e}')
+        st.error(f'Error al procesar el archivo: {str(e)}')
+else:
+    st.warning('Por favor, cargue un archivo CSV para comenzar el análisis.')
+    
+# Footer
+st.markdown("""
+    ---
+    Desarrollado para el análisis de datos de sensores urbanos.
+    Ubicación: Universidad EAFIT, Medellín, Colombia
+""")
