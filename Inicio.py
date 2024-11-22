@@ -135,8 +135,8 @@ if uploaded_file is not None:
                 st.write(df_filtered)
 
 
-         with tab2:
-            st.subheader('Análisis Estadístico')
+with tab2:
+    st.subheader('Análisis Estadístico')
     
     # Variable selector for statistics
     stat_variable = st.radio(
