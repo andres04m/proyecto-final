@@ -135,45 +135,56 @@ if uploaded_file is not None:
                 st.write(df_filtered)
 
         with tab2:
-            st.subheader('Análisis Estadístico')
-            
-            # Variable selector for statistics
-            stat_variable = st.radio(
-                "Seleccione variable para estadísticas",
-                ["temperatura", "humedad"]
-            )
-            
-            # Statistical summary
-            stats_df = df1[stat_variable].describe()
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.dataframe(stats_df)
-            
-            with col2:
-                # Additional statistics
-                if stat_variable == "temperatura":
-                    st.metric("Temperatura Promedio", f"{stats_df['mean']:.2f}°C")
-                    st.metric("Temperatura Máxima", f"{stats_df['max']:.2f}°C")
-                    st.metric("Temperatura Mínima", f"{stats_df['min']:.2f}°C")
-                    st.metric("Temperatura Mediana", f"{df1[stat_variable].median():.2f}°C")
-                    st.metric("Desviación estándar", f"{df1[stat_variable].std():.2f}°C")
-                    st.metric("Temperatura 75 Percentil", f"{np.percentile(df1[stat_variable], 75):.2f}°C")
-                    st.metric("Temperatura 25 Percentil", f"{np.percentile(df1[stat_variable], 25):.2f}°C")
-                else:
-                    st.metric("Humedad Promedio", f"{stats_df['mean']:.2f}%")
-                    st.metric("Humedad Máxima", f"{stats_df['max']:.2f}%")
-                    st.metric("Humedad Mínima", f"{stats_df['min']:.2f}%")
-                    st.metric("Humedad Mediana", f"{df1[stat_variable].median():.2f}%")
-                    st.metric("Desviación estándar", f"{df1[stat_variable].std():.2f}%")
-                    st.metric("Humedad 75 Percentil", f"{np.percentile(df1[stat_variable], 75):.2f}%")
-                    st.metric("Humedad 25 Percentil", f"{np.percentile(df1[stat_variable], 25):.2f}%")
-                
-                # Display histogram for the selected variable
-                st.write(f"### Distribución de {stat_variable.capitalize()}")
-                st.bar_chart(df1[stat_variable].value_counts())
+    st.subheader('Análisis Estadístico')
+    
+    # Variable selector for statistics
+    stat_variable = st.radio(
+        "Seleccione variable para estadísticas",
+        ["temperatura", "humedad"]
+    )
+    
+    # Statistical summary
+    stats_df = df1[stat_variable].describe()
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.dataframe(stats_df)
+    
+    with col2:
+        # Additional statistics
+        if stat_variable == "temperatura":
+            st.metric("Temperatura Promedio", f"{stats_df['mean']:.2f}°C")
+            st.metric("Temperatura Máxima", f"{stats_df['max']:.2f}°C")
+            st.metric("Temperatura Mínima", f"{stats_df['min']:.2f}°C")
+            st.metric("Temperatura Mediana", f"{df1[stat_variable].median():.2f}°C")
+            st.metric("Desviación estándar", f"{df1[stat_variable].std():.2f}°C")
+            st.metric("Temperatura 75 Percentil", f"{np.percentile(df1[stat_variable], 75):.2f}°C")
+            st.metric("Temperatura 25 Percentil", f"{np.percentile(df1[stat_variable], 25):.2f}°C")
+        else:
+            st.metric("Humedad Promedio", f"{stats_df['mean']:.2f}%")
+            st.metric("Humedad Máxima", f"{stats_df['max']:.2f}%")
+            st.metric("Humedad Mínima", f"{stats_df['min']:.2f}%")
+            st.metric("Humedad Mediana", f"{df1[stat_variable].median():.2f}%")
+            st.metric("Desviación estándar", f"{df1[stat_variable].std():.2f}%")
+            st.metric("Humedad 75 Percentil", f"{np.percentile(df1[stat_variable], 75):.2f}%")
+            st.metric("Humedad 25 Percentil", f"{np.percentile(df1[stat_variable], 25):.2f}%")
+        
+        # Display histogram for the selected variable
+        st.write(f"### Distribución de {stat_variable.capitalize()}")
+        st.bar_chart(df1[stat_variable].value_counts())
+        
+        # Add a table with points (puntos de la variable)
+        st.write(f"### Tabla de Puntos para {stat_variable.capitalize()}")
+        points_df = df1[stat_variable].reset_index()[['Time', stat_variable]]
+        st.dataframe(points_df)
 
+        # Add a line chart to show the evolution over time
+        st.write(f"### Evolución de {stat_variable.capitalize()} a lo largo del tiempo")
+        st.line_chart(df1[stat_variable])
+        
+        
+        
         with tab3:
             st.subheader('Filtros de Datos')
             
