@@ -100,7 +100,7 @@ if uploaded_file is not None:
             elif chart_type == "Área":
                 st.area_chart(temp_data)
             else:
-                st.bar_chart(temp_data)
+                st.bar_chart(temp_data);
 
     if show_moving_avg:
         st.line_chart(smoothed_temp_data, height=150, caption="Promedio móvil")
